@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  controller:
+    build: ./controller
+    restart: always
+    ports:
+      - "8001:8001"
+    networks:
+      - app-lab
+
+  position:
+    build: ./position
+    image: position:latest
+    restart: always
+    ports:
+      - "8002:8002"
+    networks:
+      - app-lab
+
+  aum:
+    build: ./aum
+    depends_on:
+      - controller
+    image: aum:latest
+    restart: always
+    networks:
+      - app-lab
+
+  trade_fill:
+    build: ./trade_fill
+    depends_on:
+      - controller    
+    image: trade_fill:latest
+    restart: always
+    networks:
+      - app-lab
+
+networks:
+  app-lab:
+    external: true
